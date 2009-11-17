@@ -1,0 +1,30 @@
+<html>
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="cors.js"></script>
+<script type="text/javascript">
+
+function testGet()
+{
+    getCORS('http://ucommbieber.unl.edu/CORS/cors.php', null, function(data){alert(data);});
+}
+function testPost(form)
+{
+    postCORS('http://ucommbieber.unl.edu/CORS/cors.php', {name: form.name.value}, function(data){alert(data);});
+}
+</script>
+<body>
+<h1>CORS Examples</h1>
+
+<p>Test GET
+    This page retrieves content from another server, using CORS<br /> 
+    <a href="#" onclick="testGet(); return false;">Get content from another server</a>
+</p>
+
+<p>Test POST:
+    <form action="#" onsubmit="testPost(this); return false">
+        Name: <input type="text" name="name" />
+        <input type="submit" />
+    </form>
+</p>
+</body>
+</html>
