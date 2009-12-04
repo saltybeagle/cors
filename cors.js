@@ -72,6 +72,9 @@ function postCORS(url, data, callback, type)
             var xdr = new XDomainRequest();
             xdr.open("post", url);
             xdr.send(params);
+            xdr.onload = function() {
+                callback(xdr.responseText, 'success');
+            };
         } else {
             try {
                 // Use the proxy to post the data.
