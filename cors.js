@@ -19,7 +19,7 @@ function getCORS(url, data, callback, type) {
             var xdr = new XDomainRequest();
             xdr.open("get", url);
             xdr.onload = function() {
-                callback(this.responseText, 'success');
+                callback(handleXDROnload(this, type), 'success', this);
             };
             xdr.send();
         } else {
@@ -73,7 +73,7 @@ function postCORS(url, data, callback, type)
             xdr.open("post", url);
             xdr.send(params);
             xdr.onload = function() {
-                callback(xdr.responseText, 'success');
+                callback(handleXDROnload(this, type), 'success', this);
             };
         } else {
             try {
@@ -87,4 +87,39 @@ function postCORS(url, data, callback, type)
             }
         }
     }
+}
+
+/**
+ * Because the XDomainRequest object in IE does not handle response XML,
+ * this function acts as an intermediary and will attempt to parse the XML and
+ * return a DOM document.
+ * 
+ * @param XDomainRequest xdr  The XDomainRequest object
+ * @param string         type The type of data to return
+ * 
+ * @return mixed 
+ */
+function handleXDROnload(xdr, type)
+{
+    var responseText = xdr.responseText, dataType = type || "";
+    if (dataType.toLowerCase() == "xml"
+        && typeof responseText == "string") {
+        // If expected data type is xml, we need to convert it from a
+        // string to an XML DOM object
+        var doc;
+        try {
+            if (window.ActiveXObject) {
+                doc = new ActiveXObject('Microsoft.XMLDOM');
+                doc.async = 'false';
+                doc.loadXML(responseText);
+            } else {
+                var parser = new DOMParser();
+                doc = parser.parseFromString(responseText, 'text/xml');
+            }
+            return doc;
+        } catch(e) {
+            // ERROR parsing XML for conversion, just return the responseText
+        }
+    }
+    return responseText;
 }
