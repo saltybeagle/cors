@@ -1,7 +1,7 @@
 This is a Cross-Origin Resource Sharing demo.
 
 Both GET and POST examples are given for accessing a resource cross-origin.
-The PHP file contains the necessary Acess-Control headers for announcing that
+The PHP file contains the necessary Access-Control headers for announcing that
 a resource supports cross-origin requests.
 
 http://saltybeagle.com/2009/09/cross-origin-resource-sharing-demo/
